@@ -9,12 +9,11 @@ public class PlayerController : MonoBehaviour
     public float speed = 2;
     public Text scoreText;
     public Text winText;
-    public float upForce;
 
     private Rigidbody rb;
     private int score;
-    private bool isGround = true;
-    private int pickUpCount;
+    private int upForce;
+    private bool isGround;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +21,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         upForce = 200;
         score = 0;
-        pickUpCount = 0;
         SetCountText();
         winText.text = "";
     }
@@ -37,7 +35,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && isGround)
         {
             rb.AddForce(new Vector3(0, upForce, 0));
-            isGround = false;
         }
 
         if(transform.position.y < -10)
@@ -46,19 +43,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.name == "Ground")
+            isGround = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.name == "Ground")
+            isGround = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            isGround = true;
-        }
-
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
 
-            score += 1;
-            pickUpCount += 1; 
+            score = score + 1;
             SetCountText();
         }
     }
@@ -67,16 +70,9 @@ public class PlayerController : MonoBehaviour
     {
         scoreText.text = "Count: " + score.ToString();
 
-        if(score >= 21)
+        if(score >= 12)
         {
             winText.text = "You Win!";
         }
-    }
-
-    void PickUpOn(Collider other)
-    {
-        var PickUp2 = other.gameObject.CompareTag("Pick Up2");
-        other.gameObject.SetActive(false);
-
     }
 }
