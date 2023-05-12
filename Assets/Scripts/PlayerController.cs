@@ -9,11 +9,12 @@ public class PlayerController : MonoBehaviour
     public float speed = 2;
     public Text scoreText;
     public Text winText;
+    public float upForce;
 
     private Rigidbody rb;
     private int score;
-    private int upForce;
-    private bool isGround;
+    [SerializeField]
+    private bool isGround = true;
 
     // Start is called before the first frame update
     void Start()
@@ -43,27 +44,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.gameObject.name == "Ground")
-            isGround = true;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.name == "Ground")
-            isGround = false;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
 
-            score = score + 1;
+            score += 1;
             SetCountText();
         }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.name == "Ground")
+            isGround = true;
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name == "Ground")
+            isGround = false;
     }
 
     void SetCountText()

@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pick Up
+  - Ground
+  - Pick Up2
+  - Pick Up Switch
   layers:
   - Default
   - TransparentFX
